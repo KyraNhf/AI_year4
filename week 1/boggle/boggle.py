@@ -1,40 +1,51 @@
+def load_file(file):
+    prefixes = set()
+    words = set()
+    with open(file) as f:
+        for word in f.readlines():
+            word = word.strip().upper()
+            words.add(word)
+            for i in range(1, len(word)):
+                prefixes.add(word[:i])
+    return words, prefixes
 
-test_bord = [['P','I','E','T'],
-             ['G','A','A','T'],
-             ['A','T','M','S'],
-             ['H','U','I','S']]
+def is_valid_move(x, y, n, visited):
+    return (x, y) not in visited and 0 <= x < n and 0 <= y < n
 
-def make_prefix_dict(file):
-    prefixes = dict()
-    for word in file.readlines():
-        first_char = word[0]
-        for i in range(len(word)-1):
-            if i==0 and first_char not in prefixes.keys():
-                prefixes[first_char] = []
-            elif word[0:i] not in prefixes[first_char]:
-                prefixes[first_char].append(word[0:i])
-    return prefixes
+def find_all_words(board, n, words, prefixes):
+    def dfs(x, y, path=[], visited=set()):
+        word = ''.join(path)
+        if word in words:
+            found_words.add(word)
 
-print(make_prefix_dict(open("words_NL.txt")))
+        if word not in prefixes:
+            return
 
-def find_words(board):
-    for row in board:
-        for col in row:
-            ...
+        visited.add((x, y))
+        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nx, ny = (x + dx) % n, (y + dy) % n
+            if is_valid_move(nx, ny, n, visited):
+                dfs(nx, ny, path + [board[nx][ny]], visited)
+        visited.remove((x, y))
 
-def find_all_paths(node, path=[], prefixes={}):
-    path = path + [node]
+    found_words = set()
+    visited = set()
+    for i in range(n):
+        for j in range(n):
+            dfs(i, j, [board[i][j]], visited)
+    return found_words
 
-    # check for goal state
-    if node in prefixes:
-        return [path]
+if __name__ == '__main__':
+    words, prefixes = load_file("words_NL.txt")
+    test_board = [['P', 'I', 'E', 'T'],
+                ['G', 'A', 'A', 'T'],
+                ['A', 'T', 'M', 'S'],
+                ['H', 'U', 'I', 'S']]
+    N = len(test_board)
+    found_words = find_all_words(test_board, N, words, prefixes)
 
-    paths = []
+    print("\nGevonden woorden:")
+    for word in sorted(found_words):
+        print(word)
 
-    for child in next_states(node):
-        if child not in path:
-            new_paths = find_all_paths(child, path)
-            for new_path in new_paths:
-                paths.append(new_path)
-
-    return paths
+# tijds complexiteit:

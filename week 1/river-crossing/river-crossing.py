@@ -1,7 +1,5 @@
 from copy import deepcopy
 
-from Demos.RegCreateKeyTransacted import keyname
-
 farmer = 'F'
 goat ='G'
 cole = 'C'

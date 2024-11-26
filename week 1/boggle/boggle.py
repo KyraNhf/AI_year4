@@ -43,9 +43,13 @@ if __name__ == '__main__':
                 ['H', 'U', 'I', 'S']]
     N = len(test_board)
     found_words = find_all_words(test_board, N, words, prefixes)
-
     print("\nGevonden woorden:")
     for word in sorted(found_words):
         print(word)
 
 # tijds complexiteit:
+# set heeft een tijdscomplexiteit van O(1)
+# dfs heeft een tijdscomplexiteit van O(b^D) branchfactor is 4, diepte is N (N = grootte van het bord)
+# de nested forloop heeft een tijdscomplexiteit van O(N^2)
+# dus 0(1) * 0(4^N) * 0(N^2) = O(4^N * N^2)
+

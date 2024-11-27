@@ -36,8 +36,38 @@ def set_grid_value(node, value):
     grid[node[0]][node[1]] = value
 
 def search(app, start, goal):
-    # plot a sample path for demonstration
-    for i in range(cf.SIZE-1):
-        app.plot_line_segment(i, i, i, i+1, color=cf.FINAL_C)
-        app.plot_line_segment(i, i+1, i+1, i+1, color=cf.FINAL_C)
-        app.pause()
+    priority_queue = PriorityQueue()
+    priority_queue.put(item = start, priority=0)
+    visited = set()
+    path = {}
+    visited.add(start)
+    while not priority_queue.empty():
+        s = priority_queue.get()
+        if s == goal:
+            break
+        visited.add(s)
+        for child in get_children(s):
+            cost_child = get_grid_value(child)
+            if cost_child == 'b':
+                continue
+            new_cost = get_grid_value(s) + 1 # new_cost = cost(s) + cost(s, s')
+            if child not in visited or new_cost < cost_child :
+                set_grid_value(child, new_cost)
+                priority_queue.put(item=child, priority=new_cost)
+                path[child] = s
+                app.plot_node(child, color=cf.PATH_C)
+                app.pause()
+    if goal in path:
+        app.draw_path(path)
+
+def get_children(node):
+    children = []
+    if node[0] > 0:
+        children.append((node[0] - 1, node[1]))
+    if node[0] < cf.SIZE - 1:
+        children.append((node[0] + 1, node[1]))
+    if node[1] > 0:
+        children.append((node[0], node[1] - 1))
+    if node[1] < cf.SIZE - 1:
+        children.append((node[0], node[1] + 1))
+    return children

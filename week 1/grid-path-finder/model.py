@@ -38,22 +38,23 @@ def set_grid_value(node, value):
 def search(app, start, goal):
     priority_queue = PriorityQueue()
     priority_queue.put(item = start, priority=0)
-    visited = set()
     path = {}
-    visited.add(start)
     while not priority_queue.empty():
         s = priority_queue.get()
         if s == goal:
             break
-        visited.add(s)
         for child in get_children(s):
             cost_child = get_grid_value(child)
             if cost_child == 'b':
                 continue
             new_cost = get_grid_value(s) + 1 # new_cost = cost(s) + cost(s, s')
-            if child not in visited or new_cost < cost_child :
+            if cost_child==-1 or new_cost < cost_child :
                 set_grid_value(child, new_cost)
-                priority_queue.put(item=child, priority=new_cost)
+                if app.alg.get() == 'A*':
+                    priority = heuristic(child, goal)
+                else:
+                    priority = new_cost
+                priority_queue.put(item=child, priority=priority)
                 path[child] = s
                 app.plot_node(child, color=cf.PATH_C)
                 app.pause()
@@ -71,3 +72,7 @@ def get_children(node):
     if node[1] < cf.SIZE - 1:
         children.append((node[0], node[1] + 1))
     return children
+
+def heuristic(node, goal):
+    distance = math.dist(node, goal)
+    return distance

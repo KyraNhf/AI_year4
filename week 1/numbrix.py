@@ -1,29 +1,44 @@
-def is_valid_move(board, x, y, visited, steps_taken):
-    return (x, y) not in visited and 0 <= x < len(board) and 0 <= y < len(board) and (board[x][y] == 0 or board[x][y] == steps_taken)
+def find_solution(board, x, y, steps_taken):
+    if board[x][y] == len(board)**2:
+        return board
+    og_value = board[x][y]
+    board[x][y] = steps_taken
+    for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+        nx, ny = x + dx, y + dy
+        if is_inbound(board, nx, ny) and (board[nx][ny] == steps_taken+1 or board[nx][ny] == 0):
+            solution = find_solution(board, nx, ny, steps_taken+1)
+            if solution:
+                return solution
+    board[x][y] = og_value
+    return
 
-def find_path(board, path, x, y, visited, steps_taken):
-    if board[x][y] == len(test_board)**2:
-        return path
+def is_inbound(board, x, y):
+    return 0 <= x < len(board) and 0 <= y < len(board)
 
-    visited.add((x, y))
-    steps_taken += 1
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        nx = dx+x
-        ny = dy+y
-        if is_valid_move(board, nx, ny, visited, steps_taken):
-            find_path(board, path+[board[nx][ny]], nx, ny, visited, steps_taken)
-    visited.remove((x, y))
+def print_board(board):
+    if board == None:
+        print("There is no solution.")
+    else:
+        for row in board:
+            line = ""
+            for col in row:
+                line += '{: <4}'.format(col)
+            print(line)
 
 if __name__ == '__main__':
     test_board = [[0,0,0,0,0,0,0,0,81],
-                  [0,0,46,45,0,55,74,0,0],
-                  [0,38,0,0,43,0,0,78,0],
-                  [0,35,0,0,0,0,0,71,0],
-                  [0,0,33,0,0,0,59,0,0],
-                  [0,17,0,0,0,0,0,67,0],
-                  [0,18,0,0,11,0,0,64,0],
-                  [0,0,24,21,0,1,2,0,0],
-                  [0,0,0,0,0,0,0,0,0]]
-    visited = set()
-    path = find_path(board=test_board, path=[], x=7, y=5, visited=visited, steps_taken=1)
-    print(path)
+                    [0,0,46,45,0,55,74,0,0],
+                    [0,38,0,0,43,0,0,78,0],
+                    [0,35,0,0,0,0,0,71,0],
+                    [0,0,33,0,0,0,59,0,0],
+                    [0,17,0,0,0,0,0,67,0],
+                    [0,18,0,0,11,0,0,64,0],
+                    [0,0,24,21,0,1,2,0,0],
+                    [0,0,0,0,0,0,0,0,0]] # Start 7,5
+    solution = find_solution(board=test_board, x=7, y=5, steps_taken=1)
+    print_board(solution)
+
+# tijds complexiteit:
+# dfs heeft een tijdscomplexiteit van O(b^D) branchfactor is 4, diepte is N (N = grootte van het bord)
+# de nested forloop heeft een tijdscomplexiteit van O(N^2)
+# dus 0(4^N) * 0(N^2) = O(4^N * N^2)

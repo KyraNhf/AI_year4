@@ -3,20 +3,14 @@ def find_solution(board, x, y, steps_taken):
         return board
     og_value = board[x][y]
     board[x][y] = steps_taken
-    steps_taken += 1
-    if is_inbound(board, x, y+1) and board[x][y+1] == steps_taken:
-        find_solution(board, x, y+1, steps_taken)
-    if is_inbound(board, x+1, y) and board[x+1][y] == steps_taken:
-        find_solution(board, x+1, y, steps_taken)
-    if is_inbound(board, x, y-1) and board[x][y-1] == steps_taken:
-        find_solution(board, x, y-1, steps_taken)
-    if is_inbound(board, x, y-1) and board[x][y-1] == steps_taken:
-        find_solution(board, x, y-1, steps_taken)
-    else:
-        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            if is_inbound(board, dx+x, dy+y) and board[dx+x][dy+y] == 0: 
-                find_solution(board, dx+x, dy+y, steps_taken)
+    for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+        nx, ny = x + dx, y + dy
+        if is_inbound(board, nx, ny) and (board[nx][ny] == steps_taken+1 or board[nx][ny] == 0):
+            solution = find_solution(board, nx, ny, steps_taken+1)
+            if solution:
+                return solution
     board[x][y] = og_value
+    return
 
 def is_inbound(board, x, y):
     return 0 <= x < len(board) and 0 <= y < len(board)
@@ -30,7 +24,6 @@ def print_board(board):
             for col in row:
                 line += '{: <4}'.format(col)
             print(line)
-        print("\n")
 
 if __name__ == '__main__':
     test_board = [[0,0,0,0,0,0,0,0,81],
@@ -44,3 +37,8 @@ if __name__ == '__main__':
                     [0,0,0,0,0,0,0,0,0]] # Start 7,5
     solution = find_solution(board=test_board, x=7, y=5, steps_taken=1)
     print_board(solution)
+
+# tijds complexiteit:
+# dfs heeft een tijdscomplexiteit van O(b^D) branchfactor is 4, diepte is N (N = grootte van het bord)
+# de nested forloop heeft een tijdscomplexiteit van O(N^2)
+# dus 0(4^N) * 0(N^2) = O(4^N * N^2)

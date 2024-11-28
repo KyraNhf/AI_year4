@@ -35,6 +35,7 @@ if __name__ == '__main__':
                     [0,18,0,0,11,0,0,64,0],
                     [0,0,24,21,0,1,2,0,0],
                     [0,0,0,0,0,0,0,0,0]] # Start 7,5
+    print_board(test_board + "\n")
     solution = find_solution(board=test_board, x=7, y=5, steps_taken=1)
     print_board(solution)
 
@@ -42,3 +43,4 @@ if __name__ == '__main__':
 # dfs heeft een tijdscomplexiteit van O(b^D) branchfactor is 4, diepte is N (N = grootte van het bord)
 # de nested forloop heeft een tijdscomplexiteit van O(N^2)
 # dus 0(4^N) * 0(N^2) = O(4^N * N^2)
+# Eigenlijk: Worst case 4^81

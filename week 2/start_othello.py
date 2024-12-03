@@ -30,6 +30,7 @@ This representation has two useful properties:
 2. Operations involving bounds checking are slightly simpler.
 """
 import random
+import time
 
 # The black and white pieces represent the two players.
 EMPTY, BLACK, WHITE, OUTER = '.', '@', 'o', '?'
@@ -208,8 +209,11 @@ def get_move(strategy, player, board):
     if strategy == RANDOM:
         move = random.choice(legal_moves(player, board))
     if strategy == MINIMAX:
-        print("Not implemented yet.")
-        move = 0
+        t0 = time.process_time()
+        evaluation_move = minimax(board, 5, player, player)
+        move = evaluation_move[1]
+        t1 = time.process_time()
+        print(f"Zet bedacht in {t1 - t0} sec")
     return move
 
 def score(player, board):
@@ -220,5 +224,66 @@ def score(player, board):
             score += 1
     return score
 
-# Play strategies
-play(RANDOM, RANDOM)
+def minimax(board, depth, player, maxi_player, alpha=float('-inf'), beta=float('inf')):
+    # Als we ver genoeg hebben gekeken of als er geen zetten meer zijn
+    if depth == 0 or not any_legal_move(player, board):
+        return evaluate_board(maxi_player, board), None
+    
+    best_move = None
+    if player == maxi_player:
+        max_evaluation = float('-inf') # Heel laag want dat wordt overtroffen door elke zet
+        for move in legal_moves(player, board):
+            board_copy = board[:]
+            make_move(move, player, board_copy)
+            evaluation_move = minimax(board_copy, depth - 1, opponent(player), maxi_player, alpha, beta)
+            evaluation = evaluation_move[0]
+            if evaluation > max_evaluation:
+                max_evaluation = evaluation
+                best_move = move
+            alpha = max(alpha, evaluation)
+            if beta <= alpha:
+                break
+        return max_evaluation, best_move
+    else:
+        min_evaluation = float('inf') # Heel hoog want dat wordt onderdaan door elke zet
+        for move in legal_moves(player, board):
+            board_copy = board[:]
+            make_move(move, player, board_copy)
+            evaluation_move = minimax(board_copy, depth - 1, opponent(player), maxi_player, alpha, beta)
+            evaluation = evaluation_move[0]
+            if evaluation < min_evaluation:
+                min_evaluation = evaluation
+                best_move = move
+            beta = min(beta, evaluation)
+            if beta <= alpha:
+                break
+        return min_evaluation, best_move
+
+def evaluate_board(player, board):
+    # Bekijk de score voor beide spelers
+    player_score = score(player, board)
+    opp_score = score(opponent(player), board)
+    # Geef hoeken een hoge score
+    corners = [11, 18, 81, 88]
+    corner_score = 0
+    for corner in corners:
+        if board[corner] == player:
+            corner_score += 10
+        if board[corner] == opponent(player):
+            corner_score -= 10
+    # Jouw mogelijke moves - het aantal moves dat de tegenstander kan maken
+    move_count = len(legal_moves(player, board)) - len(legal_moves(opponent(player), board))
+    return player_score - opp_score + corner_score + move_count
+
+# Play strategies (HUMAN, RANDOM, MINIMAX)
+play(MINIMAX, MINIMAX)
+
+# Het tellen van stenen alleen is geen goede strategie omdat je dan geen rekening houdt met de toekomst en omdat niet alle plekken even goed zijn, hoeken zijn bijvoorbeeld veel waard.
+# Om beter te evalueren is het wijs om hoeken een grotere waarde te geven, en om mee te nemen hoeveel zetten beide spelers kunnen doen na een gemaakte zet. De tegenstander in het nauw werken is een goede strategie!
+
+# Als je binnen twee seconden wilt blijven zonder pruning is een diepte van 3, op Matthias zijn desktop, maximaal, zetten lopen bij diepte 4 van 0 tot 2.5 seconden.
+# Met pruning is de maximale diepte om onder 2 seconden te blijven 5. Dat is dus al een stuk beter. Wel zie je dat bij een diepte van 6 de zetten wel tot 10 seconden op kunnen lopen!
+
+# Als je nog een betere performance wil bereieken zou je een minimale threshhold voor socre aan een mogelijke zet kunnen stellen. Als deze threshold niet geraakt wordt bekijk je die tak niet.
+# Echter kan je dan goede zetten gaan missen, en doet pruning al iets vergelijkbaars.
+# Wat ook zou kunnen is dat je een tijdslimiet meenemeen in het algoritme. Je kunt dan beginnen met een standaard diepte, en als er genoeg tijd is ga je bij elke tak nog een laag dieper, totdat de tijp te krap is.

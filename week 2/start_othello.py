@@ -29,11 +29,13 @@ This representation has two useful properties:
    between square locations and list indexes.
 2. Operations involving bounds checking are slightly simpler.
 """
+import random
 
 # The black and white pieces represent the two players.
 EMPTY, BLACK, WHITE, OUTER = '.', '@', 'o', '?'
 PIECES = (EMPTY, BLACK, WHITE, OUTER)
 PLAYERS = {BLACK: 'Black', WHITE: 'White'}
+HUMAN, RANDOM, MINIMAX = 0, 1, 2
 
 # To refer to neighbor squares we can add a direction to a square.
 UP, DOWN, LEFT, RIGHT = -10, 10, -1, 1
@@ -67,6 +69,7 @@ def print_board(board):
     for row in range(1, 9):
         begin, end = 10*row + 1, 10*row + 9
         rep += '%d %s\n' % (row, ' '.join(board[begin:end]))
+    print(rep)
     return rep
 
 # -----------------------------------------------------------------------------
@@ -153,17 +156,69 @@ def any_legal_move(player, board):
 # - Apply it to the board.
 # - Switch players. If the game is over, get the final score.
 
-def play(black_strategy, white_strategy):
+def play(black_strategy=HUMAN, white_strategy=HUMAN):
     # play a game of Othello and return the final board and score
+    print("Game starts!")
+    board = initial_board()
+    player = random.choice(('@', 'o'))
+    while any_legal_move(player, board):
+        print_board(board)
+        print(f"{player} to move.")
+        if player == '@':
+            move = get_move(black_strategy, player, board)
+        if player == 'o':
+            move = get_move(white_strategy, player, board)
+        make_move(move, player, board)
+        prev_player = player[:]
+        player = next_player(board, player)
+    print_board(board)
+    player_score = score(prev_player, board)
+    opp_score = score(opponent(prev_player), board)
+    print("Game ends!")
+    print(f"{prev_player} ends the game with {player_score}!\n{opponent(prev_player)} ends the game with {opp_score}!")
+    if player_score > opp_score:
+        winner = prev_player
+    if opp_score > player_score:
+        winner = opponent(prev_player)
+    else:
+        winner = None
+    if winner:
+        print(f"The winner is {winner}!")
+    else:
+        print("It's a tie!")
 
 def next_player(board, prev_player):
     # which player should move next?  Returns None if no legal moves exist
+    next_player = opponent(prev_player)
+    if any_legal_move(next_player, board):
+        return next_player
+    elif any_legal_move(prev_player, board):
+        return prev_player
+    else:
+        return None
 
 def get_move(strategy, player, board):
     # call strategy(player, board) to get a move
+    if strategy == HUMAN:
+        print(f"{player} turn. What is your next move? (0-{len(board)-1})")
+        move = int(input())
+        while not is_legal(move, player, board):
+            print("Cannot play that move!")
+            move = int(input())
+    if strategy == RANDOM:
+        move = random.choice(legal_moves(player, board))
+    if strategy == MINIMAX:
+        print("Not implemented yet.")
+        move = 0
+    return move
 
 def score(player, board):
     # compute player's score (number of player's pieces minus opponent's)
+    score = 0
+    for i in range(len(board)):
+        if board[i] == player:
+            score += 1
+    return score
 
 # Play strategies
-
+play(RANDOM, RANDOM)

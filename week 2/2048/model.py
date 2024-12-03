@@ -1,15 +1,16 @@
 import random
 import itertools
 import math
+import copy
 
-MAX_DEPTH = 5
+MAX_DEPTH = 6
 CHANCE = 1
 MAX = 2
 
 def merge_left(b):
     # merge the board left
     # this is the function that is reused in the other merges
-    # b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]    
+    # b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]
     def merge(row, acc):
         # recursive helper for merge_left
 
@@ -168,7 +169,7 @@ def test():
     b = [[32, 64, 2, 16], [8, 32, 8, 2], [4, 16, 8, 4], [2, 8, 4, 2]]
     assert (give_moves(b)) == ['U','D']
 
-    # no left 
+    # no left
     b = [[4, 0, 0, 0], [8, 2, 0, 0], [8, 4, 0, 0], [8, 16, 2, 0]]
     assert (give_moves(b)) == ['R','U','D']
     # no right
@@ -180,7 +181,7 @@ def test():
     # no down
     b = [[0, 0, 0, 2], [0, 0, 2, 16], [0, 4, 32, 8], [4, 8, 4, 4]]
     assert (give_moves(b)) == ['L','R','U']
-    
+
     #for i in range(11):
     #    add_two_four(b)
     #    print(b)
@@ -188,7 +189,110 @@ def test():
 def get_random_move():
     return random.choice(list(MERGE_FUNCTIONS.keys()))
 
-def get_expectimax_move(b):
-    pass
+MIN_INF = -999999999
 
-#test()
+def get_expectimax_move(b):
+    depth = 5
+    best_value = MIN_INF
+    moves = give_moves(b)
+    best_move = moves[0]
+    for move in moves:
+        b_copy = copy.deepcopy(b)
+        b_copy = MERGE_FUNCTIONS[move](b_copy)
+        value, new_move = expectimax(b_copy, CHANCE, depth, move)
+        if value > best_value:
+            best_value = value
+            best_move = new_move
+    return best_move
+
+def expectimax(b, player, depth, old_move):
+    best_move = old_move
+    moves = give_moves(b)
+    if len(moves) == 0:
+        return MIN_INF, best_move
+    if depth == 0:
+        return heuristic(b), best_move
+
+    if player == MAX:
+        best_value = MIN_INF
+        for move in moves:
+            b_copy = copy.deepcopy(b)
+            b_copy = MERGE_FUNCTIONS[move](b_copy)
+            value = expectimax(b_copy, CHANCE, depth-1, move)[0]
+            if value > best_value:
+                best_value = value
+                best_move = move
+    else:
+        best_value = 0
+        cells = get_empty_cells(b)
+        for cell in cells:
+            for value in [2, 4]:
+                board_copy = copy.deepcopy(b)
+                board_copy[cell[0]][cell[1]] = value
+                best_value += (
+                        (0.9 if value == 2 else 0.1)
+                        * (1 / len(cells))
+                        * expectimax(board_copy, MAX, depth - 1, best_move)[0]
+                )
+    return best_value, best_move
+
+def get_empty_cells(b):
+    empty_cells = []
+    for row in range(len(b)):
+        for col in range(len(b[row])):
+            if b[row][col] == 0:
+                empty_cells.append((row, col))
+    return empty_cells
+
+def heuristic(b):
+    score = 0
+    max_tile = max(max(row) for row in b)
+    for i in range(len(b)):
+        for j in range(len(b)):
+            score += b[i][j] * perfect_heuristic[i][j]
+
+            cell_value = b[i][j]
+            # more empty cells is better
+            if cell_value == 0:
+                score += 4096
+            else:
+                # check postion of highest number
+                if cell_value == max_tile:
+                    if i==0 and j==0: # highest nr in left corner
+                        score += 4096
+                #  check if high value cell is on left side of board
+                if cell_value >= 8:
+                    if i < (len(b) - 1) / 2:
+                        score += 1000
+                # check if surrounding cells have same value
+                if b[i][j] == b[i][j - 1]:
+                    score += 250
+                if b[i][j] == b[i-1][j]:
+                    score += 250
+                if i < len(b)-1:
+                    if b[i][j] == b[i+1][j]:
+                        score += 250
+                if j < len(b)-1:
+                    if b[i][j] == b[i][j+1]:
+                        score += 250
+    return score
+
+perfect_heuristic = [
+    [2**16, 2**15, 2**14, 2**13],
+    [2**9, 2**10, 2**11,  2**12],
+    [2**8, 2**7, 2**6,  2**5],
+    [2**1, 2**2, 2**3,  2**4]
+]
+
+"""
+De maximale diepte waarbij het programma nog een acceptabele performance heeft is 5. 
+In de beginfase duurt het lang voordat de AI een keuze heeft gemaakt, maar de AI bereikt wel 2048. 
+Met diepte 4 bereikt de AI geen 2048, maar is wel een heel stuk sneller
+
+de performance wordt nu vooral door de deepcopy's van het bord verslechterd, omdat hierdoor de snelheid aanzienlijk trager wordt
+Daarnaast kan de heuristic nog verbeterd kunnen worden door te kijken naar hoe het bord gestructureerd is. 
+De smoothness van het bord kan dan nog meegenomen worden: https://azaky.github.io/2048-AI/paper.pdf
+Ook kan er nog gekeken worden naar de afstand van hoge getallen tot de border. Grote getallen die zich in het midden van het bord bevinden
+moeten zwaarder gestraft worden dan kleine getallen in het midden van het bord.
+"""
+# test()

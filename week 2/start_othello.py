@@ -179,7 +179,7 @@ def play(black_strategy=HUMAN, white_strategy=HUMAN):
     print(f"{prev_player} ends the game with {player_score}!\n{opponent(prev_player)} ends the game with {opp_score}!")
     if player_score > opp_score:
         winner = prev_player
-    if opp_score > player_score:
+    elif opp_score > player_score:
         winner = opponent(prev_player)
     else:
         winner = None
@@ -282,7 +282,7 @@ play(MINIMAX, MINIMAX)
 # Om beter te evalueren is het wijs om hoeken een grotere waarde te geven, en om mee te nemen hoeveel zetten beide spelers kunnen doen na een gemaakte zet. De tegenstander in het nauw werken is een goede strategie!
 
 # Als je binnen twee seconden wilt blijven zonder pruning is een diepte van 3, op Matthias zijn desktop, maximaal, zetten lopen bij diepte 4 van 0 tot 2.5 seconden.
-# Met pruning is de maximale diepte om onder 2 seconden te blijven 5. Dat is dus al een stuk beter. Wel zie je dat bij een diepte van 6 de zetten wel tot 10 seconden op kunnen lopen!
+# Met pruning is de maximale diepte om onder 2 seconden te blijven 5 (Laptop: loopt op tot 3.6 sec). Dat is dus al een stuk beter. Wel zie je dat bij een diepte van 6 de zetten wel tot 10 seconden op kunnen lopen!
 
 # Als je nog een betere performance wil bereieken zou je een minimale threshhold voor socre aan een mogelijke zet kunnen stellen. Als deze threshold niet geraakt wordt bekijk je die tak niet.
 # Echter kan je dan goede zetten gaan missen, en doet pruning al iets vergelijkbaars.

@@ -108,13 +108,13 @@ def all_segments(len):
 
 if __name__ == '__main__':
     # give a demo with 10 cities using brute force & nn
-    places = make_cities(5000)
-    # length_force = plot_tsp(try_all_tours, places)
+    places = make_cities(500)
+    #length_force = plot_tsp(try_all_tours, places)
     length_nn = plot_tsp(nn_tsp, places)
-    length_altered = plot_tsp(nn_tsp, places, altered=True)
-    # plot_tour(alter_tour(nn_tsp(places)))
+    #length_altered = plot_tsp(nn_tsp, places, altered=True)
+    plot_tour(alter_tour(nn_tsp(places)))
     # calculate difference
-    # print(difference(length_nn, length_force))
+    #print(difference(length_nn, length_force))
 
 # force duurt bij 10 0,3 sec, bij 11 2,2 en bij 12 29,2
 # nn duurt bij elke 0,0 sec, zelfs bij 500, bij 5000 doet hij er rond 0,5 sec over

@@ -29,7 +29,7 @@ peers = dict((s, set(sum(units[s],[]))-set([s])) for s in cells)
 def test():
     # a set of tests that must pass
     assert len(cells) == 81
-    assert len(unitlist) == 27
+    assert len(unit_list) == 27
     assert all(len(units[s]) == 3 for s in cells)
     assert all(len(peers[s]) == 20 for s in cells)
     assert units['C2'] == [['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'I2'],

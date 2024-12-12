@@ -80,7 +80,7 @@ def no_conflict(grid, c, val):
 def solve(grid):
     # backtracking search for a solution (DFS)
     # your code here
-    pass
+    return False
 
 # minimum nr of clues for a unique solution is 17
 slist = [None for x in range(20)]
@@ -110,9 +110,12 @@ for i,sudo in enumerate(slist):
     print(sudo)
     d = parse_string_to_dict(sudo)
     start_time = time.time()
-    solve(d)
+    solved = solve(d)
     end_time = time.time()
-    hours, rem = divmod(end_time-start_time, 3600)
-    minutes, seconds = divmod(rem, 60)
-    print("duration [hh:mm:ss.ddd]: {:0>2}:{:0>2}:{:06.3f}".format(int(hours),int(minutes),seconds))
-    print()
+    if solved == True:
+        hours, rem = divmod(end_time-start_time, 3600)
+        minutes, seconds = divmod(rem, 60)
+        print("duration [hh:mm:ss.ddd]: {:0>2}:{:0>2}:{:06.3f}".format(int(hours),int(minutes),seconds))
+        print()
+    else:
+        print(f"Failed to solve sudoku {i}.")

@@ -1,6 +1,6 @@
 import itertools
 
-def test(L,M,N,E,J):
+def test(L, M, N, E, J):
     if E <= M:
         return False
     if N == 1 or N == 5:

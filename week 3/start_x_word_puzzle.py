@@ -1,5 +1,6 @@
 # kruiswoord puzzel
 from collections import Counter
+from math import comb
 
 
 def make_domain():
@@ -63,6 +64,8 @@ if __name__ == '__main__':
     unassigned_vars_right = [1,2,4,5,7,8,11]
     solve(d, assigned_left, unassigned_vars_left, word_x_left, assigned_right)
     solve(d, assigned_right, unassigned_vars_right, word_x_right, assigned_left)
+    max_d = max(len(d[i]) for i in d.keys()) # het langste domein is 1353 woorden lang
+    print(comb(max_d, 11)) # aantal combinaties van woorden met 11 variabelen is 668990500431001690362613920
 
 
 # your code
@@ -83,4 +86,5 @@ if __name__ == '__main__':
 # c:    arc-consistency kan gebruikt worden om het gekozen woord voor de variabele uit de domeinen van de andere variabelen met dezelfde lengte te halen,
 #       en om woorden uit de andere domeinen te halen die niet valid zijn met het gekozen woord
 
-# 3:    Het is zeker wel mogelijk om alle oplossingen te vinden, het kan alleen lang duren
+# 3:    Het is zeker wel mogelijk om alle oplossingen te vinden, het gaat alleen erg lang duren zie comments in de main functie
+

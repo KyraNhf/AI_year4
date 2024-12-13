@@ -162,4 +162,5 @@ for i,sudo in enumerate(slist):
     else:
         print(f"Failed to solve sudoku {i}.")
 
-# Sudoku 12 lijkt niet op te lossen
+# Sudoku 12 lijkt niet op te lossen, na wat research komen we er op dat dit veroorzaakt wordt doordat er te veel oplossingen zijn.
+# Verder duurt 18 inderdaad het langste met 3 seconden.

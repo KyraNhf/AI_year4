@@ -1,4 +1,6 @@
 import time
+from collections import deque
+from copy import deepcopy
 
 #   1 2 3 4 .. 9
 # A
@@ -78,9 +80,49 @@ def no_conflict(grid, c, val):
     return True
 
 def solve(grid):
-    # backtracking search for a solution (DFS)
-    # your code here
+    if not make_arc_consistent(grid): # Arc failed
+        return False
+    if all(len(grid[cell]) == 1 for cell in cells): # All cells have a solution
+        display(grid)
+        return True
+
+    length, cell = min((len(grid[c]), c) for c in cells if len(grid[c]) > 1) # Smallest domain first
+    for value in grid[cell]:
+        new_grid = deepcopy(grid)
+        if set_value(new_grid, cell, value): # If we are allowed to set the value
+            if solve(new_grid):
+                return True
     return False
+
+def set_value(grid, cell, value):
+    other_values = grid[cell].replace(value, '')
+    for other_value in other_values:
+        grid[cell] = grid[cell].replace(other_value, '')
+        if len(grid[cell]) == 0: # Cannot leave it empty
+            return False
+    return True
+
+def ac(grid, cell, peer):
+    changed = False
+    for value in grid[cell]:
+        if value not in grid[peer]:
+            continue
+        if len(grid[peer]) == 1:
+            grid[cell] = grid[cell].replace(value, '')
+            changed = True
+    return changed
+
+def make_arc_consistent(grid):
+    queue = deque((cell, peer) for cell in cells for peer in peers[cell])
+    while queue:
+        (cell, peer) = queue.popleft()
+        if ac(grid, cell, peer):
+            if len(grid[cell]) == 0:
+                return False
+            for neighbor in peers[cell]:
+                if neighbor != peer:
+                    queue.append((neighbor, cell))
+    return True
 
 # minimum nr of clues for a unique solution is 17
 slist = [None for x in range(20)]
@@ -119,3 +161,5 @@ for i,sudo in enumerate(slist):
         print()
     else:
         print(f"Failed to solve sudoku {i}.")
+
+# Sudoku 12 lijkt niet op te lossen

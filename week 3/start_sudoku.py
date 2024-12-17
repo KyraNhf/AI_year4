@@ -148,6 +148,8 @@ slist[18]= '3.6.7...........518.........1.4.5...7.....6.....2......2.....4.....8
 slist[19]= '1.....3.8.7.4..............2.3.1...........958.........5.6...7.....8.2...4.......'
 
 for i,sudo in enumerate(slist):
+    if i == 12: # er zit een fout in 12e sudoku, er is geen unieke oplossing
+        continue
     print('*** sudoku {0} ***'.format(i))
     print(sudo)
     d = parse_string_to_dict(sudo)

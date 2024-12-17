@@ -89,6 +89,10 @@ def cover(r, row_valid, col_valid, row_has_1_at, col_has_1_at):
 
     # cover row r
     row_valid[r] = 0
+
+    # bijhouden welke rows gecoverd zijn:
+    rows_covered = []
+
     for col in row_has_1_at[r]:
         if col_valid[col]:
             # cover alle collumns die overlap hebben met row r
@@ -96,21 +100,22 @@ def cover(r, row_valid, col_valid, row_has_1_at, col_has_1_at):
             for row in col_has_1_at[col]:
                 if row_valid[row]:
                     # cover alle rows die overlap hebben met col
+                    rows_covered.append(row)
                     row_valid[row] = 0
-    return row_valid, col_valid
+    return row_valid, col_valid, rows_covered
 
-def uncover(r, row_valid, col_valid, row_has_1_at, col_has_1_at):
+def uncover(r, row_valid, col_valid, row_has_1_at, col_has_1_at, rows_covered):
     # given a row r:
     #   uncover all cols that have a 1 in row r
     #   uncover all rows r' that intersect/overlap with row r
     # returns row_valid, col_valid
 
+    for row in rows_covered:
+        row_valid[row] = 1
+
     for col in row_has_1_at[r]:
-        if not col_valid[col]:
-            col_valid[col] = 1
-            for row in col_has_1_at[col]:
-                if not row_valid[row]:
-                    row_valid[row] = 1
+        col_valid[col] = 1
+
     row_valid[r] = 1
     return row_valid, col_valid
 
@@ -165,15 +170,14 @@ def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
 
             # Cover deze row en alle kruisende collumns en de rows die overlappen met deze row
 
-            row_valid, col_valid = cover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
+            row_valid, col_valid, rows_covered = cover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
 
             if solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
                 return True
 
             # Backtrack als er geen oplossing is gevonden
-            row_valid, col_valid = uncover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
+            row_valid, col_valid = uncover(row, row_valid, col_valid, row_has_1_at, col_has_1_at, rows_covered)
             solution.pop()
-
     return False
 
 

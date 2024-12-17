@@ -139,13 +139,14 @@ def print_solution(solution, row_has_1_at):
     for i in D:
         print(i)
 
-def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
+def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution, all_solutions):
     # using Algoritm X, find all solutions (= set of rows) given valid/uncovered rows and cols
     # base case: er zijn geen columns meer over, er is een exacte cover
     if all(col==0 for col in col_valid):
         print("solution found!")
         print_solution(solution, row_has_1_at)
-        return True
+        all_solutions.append(solution.copy())
+        return False # doorzoeken naar meer oplossingen
 
     # selecteer col met minste ones
     min_col = None
@@ -172,8 +173,8 @@ def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
 
             row_valid, col_valid, rows_covered = cover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
 
-            if solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
-                return True
+            if solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution, all_solutions):
+                pass
 
             # Backtrack als er geen oplossing is gevonden
             row_valid, col_valid = uncover(row, row_valid, col_valid, row_has_1_at, col_has_1_at, rows_covered)
@@ -189,7 +190,11 @@ if __name__ == '__main__':
     halt_fl, row_valid, col_valid, row_has_1_at, col_has_1_at = prepare(mx)
     if not halt_fl:
         print("solving")
-        if not solve(row_valid, col_valid, row_has_1_at, col_has_1_at, []):
+        all_solutions = []
+        solve(row_valid, col_valid, row_has_1_at, col_has_1_at, [], all_solutions)
+        if not all_solutions :
             print("no solution found!")
-    else:
-        print("no solution possible")
+        else:
+            print(f"solutions found: {len(all_solutions)}")
+
+# er zijn 4 oplossingen

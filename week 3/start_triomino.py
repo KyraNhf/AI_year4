@@ -55,7 +55,7 @@ def prepare(mx):
     print()
 
     def find_ones(rows):
-        # returns indexes in rows where the ondes are
+        # returns indexes in rows where the ones are
         # example: [[0, 3], [1, 3], [1, 2], [2]]
         lv_row_has_1_at = []
         for row in rows:
@@ -87,7 +87,32 @@ def cover(r, row_valid, col_valid, row_has_1_at, col_has_1_at):
     #   cover all rows r' that intersect/overlap with row r
     # returns row_valid, col_valid
 
-    pass
+    # cover row r
+    row_valid[r] = 0
+    for col in row_has_1_at[r]:
+        if col_valid[col]:
+            # cover alle collumns die overlap hebben met row r
+            col_valid[col] = 0
+            for row in col_has_1_at[col]:
+                if row_valid[row]:
+                    # cover alle rows die overlap hebben met col
+                    row_valid[row] = 0
+    return row_valid, col_valid
+
+def uncover(r, row_valid, col_valid, row_has_1_at, col_has_1_at):
+    # given a row r:
+    #   uncover all cols that have a 1 in row r
+    #   uncover all rows r' that intersect/overlap with row r
+    # returns row_valid, col_valid
+
+    for col in row_has_1_at[r]:
+        if not col_valid[col]:
+            col_valid[col] = 1
+            for row in col_has_1_at[col]:
+                if not row_valid[row]:
+                    row_valid[row] = 1
+    row_valid[r] = 1
+    return row_valid, col_valid
 
 def print_solution(solution, row_has_1_at):
     # place triominoes in matrix D 3 rows x 4 cols
@@ -111,11 +136,56 @@ def print_solution(solution, row_has_1_at):
 
 def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
     # using Algoritm X, find all solutions (= set of rows) given valid/uncovered rows and cols
-    pass
+    # base case: er zijn geen columns meer over, er is een exacte cover
+    if all(col==0 for col in col_valid):
+        print("solution found!")
+        print_solution(solution, row_has_1_at)
+        return True
+
+    # selecteer col met minste ones
+    min_col = None
+    min_count = max(len(col) for col in col_has_1_at)
+    for i in range(len(col_valid)):
+        if col_valid[i]:
+            count = len(col_has_1_at[i])
+            if count < min_count:
+                min_count = count
+                min_col = i
+    # als er geen columns meer over zijn: backtrack
+    if min_col is None:
+        return False
+
+    # selecteerd de rows die gecoverd moeten worden
+    rows_to_cover = col_has_1_at[min_col]
+
+    for row in rows_to_cover:
+        if row_valid[row]:
+            # voeg row aan de solution toe
+            solution.append(row)
+
+            # Cover deze row en alle kruisende collumns en de rows die overlappen met deze row
+
+            row_valid, col_valid = cover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
+
+            if solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution):
+                return True
+
+            # Backtrack als er geen oplossing is gevonden
+            row_valid, col_valid = uncover(row, row_valid, col_valid, row_has_1_at, col_has_1_at)
+            solution.pop()
+
+    return False
 
 
-mx = make_matrix(triominoes)
 
-halt_fl, row_valid, col_valid, row_has_1_at, col_has_1_at = prepare(mx)
-if not halt_fl:
-    solve(row_valid, col_valid, row_has_1_at, col_has_1_at, [])
+
+if __name__ == '__main__':
+    mx = make_matrix(triominoes)
+
+    halt_fl, row_valid, col_valid, row_has_1_at, col_has_1_at = prepare(mx)
+    if not halt_fl:
+        print("solving")
+        if not solve(row_valid, col_valid, row_has_1_at, col_has_1_at, []):
+            print("no solution found!")
+    else:
+        print("no solution possible")

@@ -1,0 +1,82 @@
+vraag b:
+L + S + U + D + R = 1
+
+L => left
+S => Stay
+U => up
+D => down
+R => right
+
+-----------------------------------
+   L = 0,9L + 0,2S + 0*R + 0*U + 0*D
+0,1L = 0,2S
+   L = 2S
+
+--------------------------------------
+   S = 0,2S + 0,1L + 0,1R + 0,1U + 0,1D
+0,8S = 0,1L + 0,1R + 0,1U + 0,1D
+   S = (0,1L + 0,1R + 0,1U + 0,1D)/0,8
+
+----------------------------------------
+   R = 0,9R + 0,2S + 0*L + 0*U + 0*D
+0,1R = 0,2S
+   R = 2S
+
+--------------------------------------
+   U = 0,9U + 0,2S + 0*L + 0*R + 0*D
+0,1U = 0,2S
+   U = 2S
+
+--------------------------------------
+   D = 0,9D + 0,2S + 0*L + 0*U + 0*R
+0,1D = 0,2S
+   D = 2S
+
+--------------------------------------
+
+L + S + U + D + R = 1
+2S+ S + 2S+ 2S+ 2S = 1
+9S = 1
+S = 1/9
+
+L + S + U + D + R = 1
+L + S + 2S+ 2S+ 2S = 1
+L + 7S = 1
+L + 7*1/9 = 1
+L = 1 - 7/9 = 2/9
+
+Dus de kans dat een willekeurige move left is, is 2/9 en de kans dat een willekeurige move stay is, is 1/9.
+
+=================================================================================
+vraag c
+
+de kans dat de robot precies 3x de actie stay uitvoert met startpositie stay is:
+P(S S S -S) = P(S|S) * P(S|S) * P(S|S) * P(-S|S)
+
+waarbij -S elke actie behalve stay is:
+P(-S) = P(U|S) + P(D|S) P(R|S) P(L|S)
+      = 0,2 + 0,2 + 0,2 + 0,2 = 0,8
+
+P(S S S -S) = P(S|S) * P(S|S) * P(S|S) * P(-S|S)
+            = 0,2 * 0,2 * 0,2 * 0,8
+            = 0.0064
+
+=================================================================================
+vraag d
+uit ‘A Tutorial on Hidden Markov Models’ hebben we de volgende informatie gehaald:
+
+pi(d) = "The quantity pi(d) is the (discrete) probability density function of duration d in state i"
+aii = state transition probabilities
+    voor de state stay is dat 0,2
+d = sum(dpi(d) for i in inf)
+  = 1/(1-aii) = 1/(1-0,2) =  1/0,8 = 1,25 states
+
+dus gemiddeld genomen blijft de robot 1,25 states in stay
+
+=================================================================================
+vraag e
+
+er zijn 41 mogelijke combinaties met 2 stappen
+
+=================================================================================
+vraag f

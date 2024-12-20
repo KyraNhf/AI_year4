@@ -1,6 +1,8 @@
 import itertools
+import time
 
 S = ["U", "D", "L", "R", "S"]
+STEPS = 10
 
 def paths(steps):
     count = 0
@@ -14,5 +16,7 @@ def paths(steps):
             count+= 1
     return count
 
-count = paths(10)
-print(count)
+t0 = time.process_time()
+count = paths(STEPS)
+t1 = time.process_time()
+print(f'Er zijn {count} mogelijkheden bij {STEPS} steps. Berekend in {t1-t0} seconden')

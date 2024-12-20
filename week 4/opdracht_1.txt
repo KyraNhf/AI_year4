@@ -1,0 +1,22 @@
+Groene taxi's = 85%
+Blauw taxi's = 15%
+
+correct geïdentificeerd = 80%
+incorrect geïdentificeerd = 20%
+
+H = taxi is blauw
+E = getuige identificeerde de taxi als blauw
+
+
+P(H) = 15% (de taxi is blauw)
+P(-H) = 85% (de taxi is groen)
+P(E|H) = 80% (de getuige identificeerd de taxi als blauw gegeven dat de taxi blauw is)
+P(E|-H) = 0,2 (de getuige identificeerd de taxi als blauw gegeven dat de taxi groen is)
+
+P(E)    = P(E|H) * P(H) + P(E|-H) * P(-H)
+        = 0,8 * 0,15 + 0,2 * 0,85 = 0,12 + 0,17 = 0,29
+
+P(H|E)  = P(E|H) * P(H) / P(E)
+        = 0,8 * 0,15 / 0,29 = 0,41
+
+De kans dat het klopt dat de taxi, geïdentificeerd door de getuige, daadwerkelijk blauw is, is 41%

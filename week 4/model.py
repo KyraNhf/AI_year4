@@ -2,6 +2,7 @@ import random
 import math
 import config as cf
 from pprint import pprint
+from decimal import *
 
 # global var
 grid  = [[0 for x in range(cf.SIZE)] for y in range(cf.SIZE)]
@@ -150,7 +151,57 @@ def load_data(filename):
 
 
 def Viterbi(all_possible_states, observations):
-    pass
+    V = [{}]
+
+    for s in all_possible_states:
+        tm = transition_model(s)[s]
+        V[0][s] = {
+            'prob': math.log(tm) if tm > 0 else float('-inf') ,
+            'prev': None
+        }
+    for t in range(1, len(observations)):
+        V.append({})
+        for s in all_possible_states:
+            mx_prob = float('-inf')
+            prev_state_selected = None
+
+            for prev_s in all_possible_states:
+                transition_prob = transition_model(prev_s)[s]
+                if transition_prob > 0:
+                    prob = V[t - 1][prev_s]['prob'] + math.log(transition_prob)
+                else:
+                    prob = float('-inf')
+
+                # kijk of die hogere kans heeft dan de vorige
+                if prob > mx_prob:
+                    mx_prob = prob
+                    prev_state_selected = prev_s
+
+            # backpointer
+            x, y, state = s
+            ob_prob = observation_model((x, y))[observations[t]]
+            if ob_prob > 0:
+                mx_observation_prob = math.log(ob_prob)
+            else:
+                mx_observation_prob = float('-inf')
+            V[t][s] = {
+                'prob': mx_prob + mx_observation_prob,
+                'prev': prev_state_selected
+            }
+
+    max_prob = max(val['prob'] for val in V[T - 1].values())
+    max_state = None
+    for state, data in V[T - 1].items():
+        if data['prob'] == max_prob and not None:
+            max_state = state
+
+    best = [max_state]
+    for t in range(T - 1, 0, -1):
+        prev_s = V[t][max_state]['prev']
+        best.insert(0, prev_s)
+        max_state = prev_s
+
+    return best
 
 def print_trellis(TR):
     THRESHOLD = -10
@@ -184,3 +235,7 @@ def move_robot (app, start):
             app.pause()
 
     app.plot_node(current, color=cf.ROBOT_C)
+
+real_states, observations = load_data("observations_v1.txt")
+states = get_all_states()
+print(Viterbi(states, observations))

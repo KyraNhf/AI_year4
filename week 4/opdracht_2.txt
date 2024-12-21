@@ -76,7 +76,67 @@ dus gemiddeld genomen blijft de robot 1,25 states in stay
 =================================================================================
 vraag e
 
-er zijn 41 mogelijke combinaties met 2 stappen
+er zijn 41 mogelijke combinaties met 2 stappen, zie file opdracht_2.py
 
 =================================================================================
 vraag f
+
+er zijn 265721 mogelijke combinaties met 10 stappen, zie file opdracht_2.py
+
+=================================================================================
+vraag g
+
+na elke stap zijn er of 2 of 5 mogelijke stappen, maar omdat de mogelijkheid van 2 stappen vaker voorkomt, namelijk 4 keer voor elke move dat niet stay is,
+is de (gemiddelde) branching factor van de boom: (4*2 +5)/5 = 2,6
+
+=================================================================================
+vraag h
+Om deze vraag te beantwoorden zien we stay niet als een stap, anders dan bij de vorige opgaven, er is anders namelijk geen antwoord op deze vraag
+
+om vanuit 7,7 10,10 te bereiken in precies 6 stappen, kan je enkel de moves down en right uitvoeren
+als we willen weten op hoeveel mogelijke manieren dit kan moeten we 6 boven 3 uitrekenen.
+6 boven 3 = 6! / (3! * 3!) = 720 / 36 = 20
+
+dus er zijn 20 mogelijke routes van 6 stappen om van 7,7 naar 10,10 te komen
+
+=================================================================================
+vraag i
+in de vorige vraag was 6 de kortste route, om het aantal paden uit te rekenen moesten we dit delen door
+de factorial van de helft van de route te nemen en deze te vermenigvuldigen met hetzelfde.
+In deze opdracht berekenen we de kortste route met de manhatten distance, waarna we dezelfde formule toepassen als hierboven beschreven
+
+manhatten distance = md = |x1-x2| + |y1-y2|
+
+aantal paden = md! / ((md/2)! * (md/2)!)
+
+=================================================================================
+vraag j
+
+zoals beschreven in de opdracht kan de robot in positie P, P doorgeven maar ook de buren van P.
+Hierbij zijn de kansen uniform verdeeld, elke positie heeft 0,2 kans om doorgegeven te worden
+
+In deze vraag is P 5,5, er is dus een kans van 0,2 dat deze waarneming juist is.
+
+=================================================================================
+vraag k
+We weten niet precies hoe we deze vraag moeten interpreteren. We hebben twee mogelijke antwoorden
+
+1:
+als state = (4,4, 'S') zijn er vanuit deze positie (4,4) en deze actie stay, 5 mogelijke volgende states:
+namelijk up (4, 3, 'U'), down (4, 5, 'D'), left (3, 4, 'L'), right (5, 4, 'R') en stay (4, 4, 'S')
+
+2:
+Op een bord van grote (n,n) met 5 states (S,L,R,U,D), en met grenzen waar je niet overheen kunt zijn er:
+(n-1)*(n-1)*5 + (4n-6)*4 + 4*3 = 5(n-1)^2 + 16n-24 + 12 states
+
+als we een bord van n=15 hebben, wordt de formule:
+5(15-1)^2 + 16*15-24 + 12 = 980 + 216 + 12 = 1208 states
+
+=================================================================================
+vraag l
+
+
+
+
+
+

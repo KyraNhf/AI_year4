@@ -136,7 +136,60 @@ als we een bord van n=15 hebben, wordt de formule:
 vraag l
 
 
+Het meest waarschijnlijke pad van observations_v1 is volgens het algoritme:
 
+[(8, 5, 'S'), (7, 5, 'L'), (6, 5, 'L'), (5, 5, 'L'), (4, 5, 'L'), (3, 5, 'L'), (3, 5, 'S'),
+(4, 5, 'R'), (5, 5, 'R'), (6, 5, 'R'), (7, 5, 'R'), (8, 5, 'R'), (9, 5, 'R'), (10, 5, 'R'),
+(11, 5, 'R'), (11, 5, 'S'), (10, 5, 'L'), (10, 5, 'S'), (11, 5, 'R'), (11, 5, 'S'), (10, 5, 'L'),
+(9, 5, 'L'), (8, 5, 'L'), (7, 5, 'L'), (6, 5, 'L')]
 
+=================================================================================
+vraag m
+in de code op regel 162 zie je T, de lengte van het aantal observaties, terug
+in regels 164 en 168 zie je N, het aantal states, terug
+deze zijn alle drie een geneste forloop:
+binnen het loopen door de lengte van de observaties, wordt er geloopt over de N waarbinnen weer geloopt wordt over N
+
+dat komt dan neer op eem complexiteit van N^2 * T
+
+=================================================================================
+vraag n
+Het is niet verstandig om de paden naar de toestanden met kleine kansen te prunen.
+Dit is omdat je niet weet niet wat er in de toekomst gaat gebeuren:
+of die state naar een andere state weer een grotere kans op gaat leveren, waardoor de totale kans weer groter wordt dan de andere route.
+Je kan daarom beter wel elke state berekenen, zodat je de grootste kans en daarmee het meest waarschijnlijke pad vind.
+
+=================================================================================
+vraag o
+
+het meest waarschijnlijke pad is:
+
+[(8, 5, 'S'), (7, 5, 'L'), (6, 5, 'L'), (5, 5, 'L'), (4, 5, 'L'), (3, 5, 'L'),
+(3, 5, 'S'), (4, 5, 'R'), (5, 5, 'R'), (6, 5, 'R'), (7, 5, 'R'), (8, 5, 'R'),
+(9, 5, 'R'), (10, 5, 'R'), (11, 5, 'R'), (11, 5, 'S'), (10, 5, 'L'), (10, 5, 'S'),
+(11, 5, 'R'), (11, 5, 'S'), (10, 5, 'L'), (9, 5, 'L'), (8, 5, 'L'), (7, 5, 'L'), (6, 5, 'L')]
+
+=================================================================================
+vraag p
+
+met observations_v2 maakt viterbi 3 fouten:
+(5, 5, 'S') (8, 5, 'S') i = 0
+(6, 5, 'R') (7, 5, 'L') i = 1
+(6, 5, 'S') (6, 5, 'L') i = 2
+dus wel interessant dat de eerste drie fout gaan
+
+ook voor observations_v1 maakt viterbi 3 fouten op dezelfde plekken:
+(5, 5, 'S') (8, 5, 'S') i = 0  prob (5, 5, S) = -1.6094379124341003  prob (8, 5, S) = -1.6094379124341003
+(6, 5, 'R') (7, 5, 'L') i = 1
+(6, 5, 'S') (6, 5, 'L') i = 2
+
+=================================================================================
+vraag q
+wij denken dat paralleliseren een goede toevoeging zou zijn om de vertabi algoritme te versnellen,
+omdat de states voor de observaties los van elkaar worden berekend, daarom kan je deze berekeningen paralleliseren.
+
+Daarnaast hebben we een artikel gevonden waarin meerdere manieren worden beschreven om het algoritme te optimaliseren,
+zo benoemen ze prepruning, wat wel interessant kan zijn om het algoritme te versnellen.
+https://naos-be.zcu.cz/server/api/core/bitstreams/fa7fb39b-7950-4374-b88c-443351c40b0f/content
 
 

@@ -168,39 +168,41 @@ def Viterbi(all_possible_states, observations):
             for prev_s in all_possible_states:
                 transition_prob = transition_model(prev_s)[s]
                 if transition_prob > 0:
-                    prob = V[t - 1][prev_s]['prob'] + math.log(transition_prob)
+                    prob = V[t - 1][prev_s]['prob'] + math.log(transition_prob + 1e-10)
                 else:
                     prob = float('-inf')
-
-                # kijk of die hogere kans heeft dan de vorige
                 if prob > mx_prob:
                     mx_prob = prob
                     prev_state_selected = prev_s
 
             # backpointer
             x, y, state = s
-            ob_prob = observation_model((x, y))[observations[t]]
-            if ob_prob > 0:
-                mx_observation_prob = math.log(ob_prob)
+            if observations[t] is not None:
+                ob_prob = observation_model((x, y))[observations[t]]
+                if ob_prob > 0:
+                    mx_observation_prob = math.log(ob_prob)
+                else:
+                    mx_observation_prob = float('-inf')
             else:
-                mx_observation_prob = float('-inf')
+                mx_observation_prob = 0
             V[t][s] = {
                 'prob': mx_prob + mx_observation_prob,
                 'prev': prev_state_selected
             }
-
-    max_prob = max(val['prob'] for val in V[T - 1].values())
+    max_prob = max(val['prob'] for val in V[len(observations) - 1].values())
+    print(max_prob)
     max_state = None
-    for state, data in V[T - 1].items():
+    for state, data in V[len(observations) - 1].items():
         if data['prob'] == max_prob and not None:
             max_state = state
 
     best = [max_state]
-    for t in range(T - 1, 0, -1):
+    for t in range(len(observations) - 1, 0, -1):
         prev_s = V[t][max_state]['prev']
         best.insert(0, prev_s)
         max_state = prev_s
-
+    for t in range(3):  # Bekijk de eerste 3 tijdstappen
+        print(f"Step {t}: {V[t]}")
     return best
 
 def print_trellis(TR):
@@ -238,4 +240,12 @@ def move_robot (app, start):
 
 real_states, observations = load_data("observations_v1.txt")
 states = get_all_states()
-print(Viterbi(states, observations))
+path = Viterbi(states, observations)
+print(path)
+fault = 0
+for i in range(len(real_states)):
+    if real_states[i] != path[i]:
+        print(i)
+        print(real_states[i], path[i])
+        fault += 1
+print(fault)

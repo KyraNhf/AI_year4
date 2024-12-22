@@ -201,9 +201,6 @@ def Viterbi(all_possible_states, observations):
         prev_s = V[t][max_state]['prev']
         best.insert(0, prev_s)
         max_state = prev_s
-    for t in range(3):  # Bekijk de eerste 3 tijdstappen
-        print(f"Step {t}: {V[t]}")
-    return best
 
 def print_trellis(TR):
     THRESHOLD = -10

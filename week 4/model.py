@@ -2,7 +2,6 @@ import random
 import math
 import config as cf
 from pprint import pprint
-from decimal import *
 
 # global var
 grid  = [[0 for x in range(cf.SIZE)] for y in range(cf.SIZE)]

@@ -186,7 +186,6 @@ def solve(row_valid, col_valid, row_has_1_at, col_has_1_at, solution, all_soluti
 
 if __name__ == '__main__':
     mx = make_matrix(triominoes)
-
     halt_fl, row_valid, col_valid, row_has_1_at, col_has_1_at = prepare(mx)
     if not halt_fl:
         print("solving")

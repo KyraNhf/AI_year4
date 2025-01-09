@@ -1,5 +1,6 @@
 import nltk
 import sys
+nltk.download('punkt_tab')
 
 def main():
 
@@ -16,15 +17,19 @@ def main():
     slist[9] = "En als ze klaar zijn, wil Jip direct weer met de trein gaan spelen."
 
     TERMINALS = """
-    N -> "jip" | "moeder"
-    V -> "roept"
+    N -> "jip" | "moeder" | "janneke" | "slaapkamer"
+    V -> "roept" | "spelen"
+    Det -> "de"
+    P -> "in"
+    Con -> "en"
     """
 
     NONTERMINALS = """
-    S -> NP VP
-    VP -> V | V NP
-    NP -> N
+    S -> NP VP 
+    VP -> V | V NP | Con NP
+    NP -> N | NP VP
     """
+
 
     # parse CFG from strings
     grammar = nltk.CFG.fromstring(NONTERMINALS + TERMINALS)
@@ -81,3 +86,7 @@ def np_chunk(tree):
         return tree.label() == "NP" and not any(st.label() == "NP" for st in tree)
 
     return [st for st in tree.subtrees(subtrees_filter)]
+
+
+if __name__ == '__main__':
+    main()

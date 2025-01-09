@@ -1,5 +1,6 @@
 import nltk
 import sys
+nltk.download('punkt_tab')
 
 def main():
 
@@ -81,3 +82,7 @@ def np_chunk(tree):
         return tree.label() == "NP" and not any(st.label() == "NP" for st in tree)
 
     return [st for st in tree.subtrees(subtrees_filter)]
+
+
+if __name__ == '__main__':
+    main()

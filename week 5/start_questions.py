@@ -98,6 +98,7 @@ def compute_idfs(documents):
     count_docs_have_word = dict()
 
     ### your code
+    word_idfs = None
 
     return word_idfs
 
@@ -115,7 +116,7 @@ def top_files(query, files, idfs, n):
     file_scores = {filename:0 for filename in files}
 
     ### your code
-
+    sorted_files = None
     # return best n files
     return sorted_files[:n]
 

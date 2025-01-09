@@ -53,3 +53,4 @@ print("Predictions: ")
 
 for review in input_reviews:
     # print pos or negative, together with the probability
+    pass

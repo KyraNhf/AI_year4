@@ -1,9 +1,10 @@
 import nltk
 import sys
+
 nltk.download('punkt_tab')
 
-def main():
 
+def main():
     slist = [None for x in range(10)]
     slist[0] = "Jip roept moeder."
     slist[1] = "Jip en Janneke spelen in de slaapkamer."
@@ -17,19 +18,21 @@ def main():
     slist[9] = "En als ze klaar zijn, wil Jip direct weer met de trein gaan spelen."
 
     TERMINALS = """
-    N -> "jip" | "moeder" | "janneke" | "slaapkamer"
-    V -> "roept" | "spelen"
-    Det -> "de"
-    P -> "in"
-    Con -> "en"
+    N -> "jip" | "moeder" | "janneke" | "slaapkamer" | "takkie" | "staart" | "pootjes" | "brandweerauto" | "keukentrap" | "hij" | "slee" | "jongetjes" | "hondjes" | "raam" | "morgen" | "ze" | "trein"
+    V -> "roept" | "spelen" | "is" | "valt" | "loopt" | "komt" | "gezien" | "heeft" | "kijkt" | "zijn" | "wil" | "gaan" | "spelen"
+    Det -> "de" | "zijn" | "een" | "twee" | "het" | "weer"
+    P -> "in" | "met" | "tussen" | "uit"
+    Con -> "en" | "als"
+    Adv -> "nu" | "heel" | "bijna" | "overboord" |"weg" | "er" | "voorbij" | "terug" | "erop" | "ervoor" | "klaar" | "direct"
+    Adj -> "voorzichtig" | "grote" | "rode" | "volgende"
     """
 
     NONTERMINALS = """
-    S -> NP VP 
-    VP -> V | V NP | Con NP
-    NP -> N | NP VP
+    S -> NP VP | PP VP | NP PP
+    VP -> V | VP NP |VP PP 
+    NP -> N | NP NP | Con NP | Det NP | NP PP | Adj NP | N VP | NP V
+    PP -> Adv | P NP | Adv PP | Adv Adj | Con PP | Con NP | Adv VP
     """
-
 
     # parse CFG from strings
     grammar = nltk.CFG.fromstring(NONTERMINALS + TERMINALS)
@@ -40,7 +43,7 @@ def main():
     # for p in grammar.productions():
     #    print(p).
 
-    for i,s in enumerate(slist):
+    for i, s in enumerate(slist):
         print(s)
 
         s = preprocess(s)
@@ -61,6 +64,7 @@ def main():
             print("Noun Phrase Chunks")
             for np in np_chunk(tree):
                 print(" ".join(np.flatten()))
+
 
 def preprocess(sentence):
     """

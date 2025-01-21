@@ -96,9 +96,18 @@ def compute_idfs(documents):
     num_docs = len(documents)
     # dictionary to count number of docs containing each word
     count_docs_have_word = dict()
+    for values in documents.values():
+        unique_words = set(values)
+        for word in unique_words:
+            if word in count_docs_have_word.keys():
+                count_docs_have_word[word] = count_docs_have_word[word] + 1
+            else :
+                count_docs_have_word[word] = 1
 
     ### your code
-    word_idfs = None
+    word_idfs = {}
+    for word, doc_count in count_docs_have_word.items():
+        word_idfs[word] = math.log(num_docs / doc_count)
 
     return word_idfs
 
@@ -114,6 +123,7 @@ def top_files(query, files, idfs, n):
 
     # dictionary to hold scores for files
     file_scores = {filename:0 for filename in files}
+    print(file_scores)
 
     ### your code
     sorted_files = None
@@ -144,3 +154,5 @@ def top_sentences(query, sentences, idfs, n):
 
     return sorted_sentences[:n]
 
+if __name__ == '__main__':
+    main()

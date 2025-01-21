@@ -101,7 +101,7 @@ def compute_idfs(documents):
         for word in unique_words:
             if word in count_docs_have_word.keys():
                 count_docs_have_word[word] = count_docs_have_word[word] + 1
-            else :
+            else:
                 count_docs_have_word[word] = 1
 
     ### your code
@@ -123,19 +123,22 @@ def top_files(query, files, idfs, n):
 
     # dictionary to hold scores for files
     file_scores = {filename:0 for filename in files}
-    print(file_scores)
+    # print(file_scores)
 
     sorted_files = None
-    words = query.copy()
+    query_words = query.copy()
     for word in query:
-        if word not in list(files.values())[0]:
-            words.remove(word)
-    
-    for word in words:
-        pass
+        if word not in idfs.keys():
+            query_words.remove(word)
 
+    for file, words in files.items():
+        file_words = set(words)
+        for word in file_words:
+            if word in query_words:
+                file_scores[file] = file_scores[file] + idfs[word]
 
     # return best n files
+    sorted_files = sorted([file for file in files], key= lambda x: (file_scores[x]), reverse=True)
     return sorted_files[:n]
 
 def top_sentences(query, sentences, idfs, n):
@@ -151,7 +154,16 @@ def top_sentences(query, sentences, idfs, n):
     sentence_score = {sentence:{'idf_score': 0, 'length':0, 'query_words':0, 'qtd_score':0} for sentence in sentences}
 
     ### your code
-
+    for key, values in sentences.items():
+        sentence = set(values)
+        sentence_score[key]['length'] = len(sentence)
+        for word in sentence:
+            if word in query:
+                word_idf = idfs[word]
+                sentence_score[key]['idf_score'] = sentence_score[key]['idf_score']+word_idf
+                sentence_score[key]['query_words'] = sentence_score[key]['query_words'] + 1
+        sentence_score[key]['qtd_score'] = round(sentence_score[key]['query_words'] / sentence_score[key]['length'], 3)
+    print(sentence_score)
     # example: Query: jip
     # sentence_score:
     # {'Jip en Janneke lopen samen naar school.': {'idf_score': 0.693, 'length': 8, 'query_words': 1, 'qtd_score': 0.125}, 

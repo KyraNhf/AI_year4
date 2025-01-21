@@ -57,5 +57,8 @@ input_reviews = [
 print("Predictions: ")
 
 for review in input_reviews:
-    # print pos or negative, together with the probability
-    nb_classifier.classify(review)
+    features = extract_features(review.split())
+    pdist = nb_classifier.prob_classify(features)
+    prob = max(pdist.prob('Positive'), pdist.prob('Negative'))
+    print(f"{round(100*prob, 1)}% {nb_classifier.classify(features)}: {review}")
+    print("-----------------------------")

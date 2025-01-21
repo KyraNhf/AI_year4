@@ -6,3 +6,5 @@ opdracht b
 mogelijke volgende woorden op state ('Gare', 'du') zijn {'Midi': 1, 'Nord': 1} waarin de values de frequenties representeerd
 de transistion probabilities zijn als volgt voor deze woorden:
 {'Nord': 0.5, 'Midi': 0.5} probabilities
+
+opdracht c

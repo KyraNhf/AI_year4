@@ -1,1 +1,8 @@
 opdracht a
+De key's is een state van de voorgaande woorden, met een lengte van state_size, in dit geval twee
+de value's bevatten dictonary's van oplvolgende woorden en de frequenties hoevaak ze die voorgaande woorden opvolgen.
+
+opdracht b
+mogelijke volgende woorden op state ('Gare', 'du') zijn {'Midi': 1, 'Nord': 1} waarin de values de frequenties representeerd
+de transistion probabilities zijn als volgt voor deze woorden:
+{'Nord': 0.5, 'Midi': 0.5} probabilities

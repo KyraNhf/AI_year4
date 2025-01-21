@@ -12,3 +12,17 @@ mogelijke volgende woorden op state ('Japi', 'wist', 'wel') zijn {'beter.': 1} w
 de transistion probabilities zijn als volgt voor dit woord:
 {'beter.': 1.0}
 er is maar een woord, dus de probability is ook 1
+
+opdracht d
+# Sentences with state size 2:
+En dienzelfden avond had hij Hoyer een riks te leen gevraagd, enkel om te zien of de stukken van de centen.
+Je zeilde maar met de guldens en riksdaalders, dan liep i in Nijmegen doorgebracht.
+Spuwen moest i als i werkte; met Japi sprak i.
+Wat bereikten ze met hun tweeÃ«n, met hun drieÃ«n, met hun tweeÃ«n, met hun vieren achter hem en keken en knikten en wezen.
+Het water stroomde maar, de zon was weg en ging niet meer naar om, altijd ontevreden.
+# Sentences with state size 3:
+Het bandje deed i niet meer.
+Doornat was ik zoo gewoon, omdat je met de aarde al bestaan, duizende jaren kon i doen?
+Die monsters werden weggegooid; die gingen nooit naar de bedienden van zijn kantoor hield op.
+Al die werelden zeilden verlaten door de reet steken en zoo van buiten de deur.
+Niemand hoorde iets van hem, tot ik hem op een briefkaartje, dat Jeanne aan haar borstkwaal gestorven was.

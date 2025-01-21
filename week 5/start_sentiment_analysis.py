@@ -34,9 +34,11 @@ print("Number of training datapoints: ", len(features_train))
 print("Number of test datapoints: ", len(features_test))
 
 # train the NaiveBayesClassifier
-train = NaiveBayesClassifier.train(features_train)
+nb_classifier = NaiveBayesClassifier.train(features_train)
 # print accuracy of classifier
+print(f"Accuracy: {nltk.classify.util.accuracy(nb_classifier, features_test)}")
 # show the 20 most informative features
+nb_classifier.show_most_informative_features(n=20)
 
 # sample input reviews
 input_reviews = [
@@ -56,4 +58,4 @@ print("Predictions: ")
 
 for review in input_reviews:
     # print pos or negative, together with the probability
-    pass
+    nb_classifier.classify(review)

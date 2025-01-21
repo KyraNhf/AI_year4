@@ -2,8 +2,10 @@ import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import movie_reviews
 
+
 def extract_features(word_list):
     return dict([(word, True) for word in word_list])
+
 
 # load positive and negative reviews from NLTK corpus (# 1000 pos, 1000 neg)
 positive_fileids = movie_reviews.fileids('pos')
@@ -12,10 +14,10 @@ negative_fileids = movie_reviews.fileids('neg')
 # go through all 'positive files', extract the words and put them in a dict
 # example: [({'films': True, 'adapted': True, 'from': True, 'comic': True, 'books': True, 'have': True}, 'Positive')]
 # list of tuples, where each tuple has form (dict, 'Positive')
-features_positive = [(extract_features(movie_reviews.words(fileids=[f])),'Positive') for f in positive_fileids]
-features_negative = [(extract_features(movie_reviews.words(fileids=[f])),'Negative') for f in negative_fileids]
+features_positive = [(extract_features(movie_reviews.words(fileids=[f])), 'Positive') for f in positive_fileids]
+features_negative = [(extract_features(movie_reviews.words(fileids=[f])), 'Negative') for f in negative_fileids]
 
-#print(features_positive[1])
+# print(features_positive[1])
 
 print("Number of words seen as positive: ", len(features_positive))
 print("Number of words seen as negative: ", len(features_negative))
@@ -25,13 +27,14 @@ threshold_factor = 0.8
 threshold_positive = int(threshold_factor * len(features_positive))
 threshold_negative = int(threshold_factor * len(features_negative))
 
-features_train = features_positive[:threshold_positive]+features_negative[:threshold_negative]
-features_test = features_positive[threshold_positive:]+features_negative[threshold_negative:]
+features_train = features_positive[:threshold_positive] + features_negative[:threshold_negative]
+features_test = features_positive[threshold_positive:] + features_negative[threshold_negative:]
 
 print("Number of training datapoints: ", len(features_train))
-print("Number of test datapoints: ", len(features_test)) 
+print("Number of test datapoints: ", len(features_test))
 
 # train the NaiveBayesClassifier
+train = NaiveBayesClassifier.train(features_train)
 # print accuracy of classifier
 # show the 20 most informative features
 

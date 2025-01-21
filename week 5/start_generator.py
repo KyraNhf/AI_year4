@@ -28,7 +28,7 @@ for i in range(5):
 # train and print model for n=3
 text_model_three = markovify.Text(text, state_size=3)
 d_three = text_model_three.chain.model
-# pprint(d)
+# pprint(d_three)
 
 state_three = ('Japi', 'wist', 'wel')
 if state_three in d_three:

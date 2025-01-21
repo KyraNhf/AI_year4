@@ -8,3 +8,7 @@ de transistion probabilities zijn als volgt voor deze woorden:
 {'Nord': 0.5, 'Midi': 0.5} probabilities
 
 opdracht c
+mogelijke volgende woorden op state ('Japi', 'wist', 'wel') zijn {'beter.': 1} waarin de value de frequentie representeerd
+de transistion probabilities zijn als volgt voor dit woord:
+{'beter.': 1.0}
+er is maar een woord, dus de probability is ook 1

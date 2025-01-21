@@ -125,8 +125,16 @@ def top_files(query, files, idfs, n):
     file_scores = {filename:0 for filename in files}
     print(file_scores)
 
-    ### your code
     sorted_files = None
+    words = query.copy()
+    for word in query:
+        if word not in list(files.values())[0]:
+            words.remove(word)
+    
+    for word in words:
+        pass
+
+
     # return best n files
     return sorted_files[:n]
 

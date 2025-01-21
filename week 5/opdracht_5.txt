@@ -1,0 +1,34 @@
+opdracht b
+sentences is een lijst van de tokenized zinnen
+min_count is voor het prunen van de interne dictonary voor oninteresante woorden (woorden die heel weinig voorkomen in de corpus)
+vector_size is de dimensionaliteit van de woord vectoren
+workers is voor hoeveel threads er worden gebruikt, om het trainen te versnellen
+window is de maximale afstand tussen het huidige woord en het voorspelde woord binnen een zin
+sg bepaalt welk training algoritme gebruikt wordt
+    in dit geval is dat CBOW, continious bag of words.
+    dit is een 1-hidden-layer neural network.
+    Dit gebruikt het gemiddelde van meerdere input context woorden om het centrale woord te voorspelen.
+
+
+opdracht c
+
+resultaten:
+CBOW:
+ cosine japi, bavink: 0.87558347
+ cosine japi, koekebakker: 0.818684
+ cosine jenever, bier: 0.59096915
+ cosine jenever, kerel: 0.6307684
+
+SG:
+ cosine japi, bavink: 0.9951521
+ cosine japi, koekebakker: 0.99532074
+ cosine jenever, bier: 0.99591786
+ cosine jenever, kerel: 0.9954585
+
+tijdsduur per algoritme:
+CBOW = 0,06 sec
+SG = 0,09 sec
+
+SG duurt dus langer, omdat Skip-gram vanuit 1 woord (centrale woord) meerdere woorden, de context, gaat voorspellen.
+CBOW die voorspelt vanuit de context, meerdere woorden, 1 woord (het centrale woord).
+Daardoor is CBOW dus sneller, want die hoeft maar 1 voorspelling per centrale woord te doen.

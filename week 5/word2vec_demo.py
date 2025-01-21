@@ -29,7 +29,7 @@ print('** first 30 words:')
 print(list_w_2[0:30])
 print('** most frequent words (top 10):')
 # Count word frequencies
-Counter = Counter (list_w_2)
+Counter = Counter(list_w_2)
 print(Counter.most_common(10))
 
 # init the model, sentence has to be a list of words

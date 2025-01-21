@@ -141,6 +141,7 @@ def top_files(query, files, idfs, n):
     sorted_files = sorted([file for file in files], key= lambda x: (file_scores[x]), reverse=True)
     return sorted_files[:n]
 
+
 def top_sentences(query, sentences, idfs, n):
 
     # query = a set of words
@@ -163,7 +164,7 @@ def top_sentences(query, sentences, idfs, n):
                 sentence_score[key]['idf_score'] = sentence_score[key]['idf_score']+word_idf
                 sentence_score[key]['query_words'] = sentence_score[key]['query_words'] + 1
         sentence_score[key]['qtd_score'] = round(sentence_score[key]['query_words'] / sentence_score[key]['length'], 3)
-    print(sentence_score)
+
     # example: Query: jip
     # sentence_score:
     # {'Jip en Janneke lopen samen naar school.': {'idf_score': 0.693, 'length': 8, 'query_words': 1, 'qtd_score': 0.125}, 
@@ -171,7 +172,7 @@ def top_sentences(query, sentences, idfs, n):
 
     # rank sentences by score and return n sentence
     sorted_sentences = sorted([sentence for sentence in sentences], key= lambda x: (sentence_score[x]['idf_score'], sentence_score[x]['qtd_score']), reverse=True)
-
+    print(sentence_score[sorted_sentences[0]])
     return sorted_sentences[:n]
 
 if __name__ == '__main__':

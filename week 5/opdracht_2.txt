@@ -26,3 +26,9 @@ Doornat was ik zoo gewoon, omdat je met de aarde al bestaan, duizende jaren kon 
 Die monsters werden weggegooid; die gingen nooit naar de bedienden van zijn kantoor hield op.
 Al die werelden zeilden verlaten door de reet steken en zoo van buiten de deur.
 Niemand hoorde iets van hem, tot ik hem op een briefkaartje, dat Jeanne aan haar borstkwaal gestorven was.
+
+opdracht e
+Make sentence probeert, standaard tien keer, om een zin te maken gebaseerd op een gegeven chain.
+Eerst kiest hij een woord dat gemarkeerd is met BEGIN, zodat hij weet dat de zin begint.
+Daarna loopt hij met chain.walk door de chain heen.
+Hij kijkt of de woorden qua lengte naar wens zijn en als dat zo is joined hij ze naar één zin.

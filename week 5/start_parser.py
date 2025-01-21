@@ -29,9 +29,9 @@ def main():
 
     NONTERMINALS = """
     S -> NP VP | PP VP | NP PP
-    VP -> V | VP NP |VP PP 
+    VP -> V | VP NP |VP PP | V V
     NP -> N | NP NP | Con NP | Det NP | NP PP | Adj NP | N VP | NP V
-    PP -> Adv | P NP | Adv PP | Adv Adj | Con PP | Con NP | Adv VP
+    PP -> Adv | P NP | Adv PP | Adv Adj | Con PP | Con NP | Adv VP | Det PP
     """
 
     # parse CFG from strings

@@ -8,7 +8,8 @@ text = f.read()
 
 # train and print model for n=2
 text_model = markovify.Text(text, state_size=2)
-
+d = text_model.chain.model
+pprint(d)
 # generate some sentences
 
 # train and print model for n=3
